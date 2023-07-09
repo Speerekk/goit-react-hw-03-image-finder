@@ -13,3 +13,67 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.searchbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(109, 96, 193, 0.667);
+  padding-bottom: 20px;
+  padding-top: 10px;
+}
+
+.form {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.input {
+  padding: 10px;
+  width: 100%;
+  margin-right: 10px;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #ccc;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: bisque;
+}
+
+.button-load {
+  padding: 10px 20px;
+  background-color: #ccc;
+  border: none;
+  cursor: pointer;
+}
+
+.button-load:hover {
+  background-color: bisque;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2px;
+}
+
+.gallery-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gallery-item__image {
+  width: 90%;
+  height: 90%;
+  /* object-fit: cover; */
+}
