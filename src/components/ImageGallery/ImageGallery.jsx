@@ -1,13 +1,17 @@
 import React from 'react';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 
-const ImageGallery = ({ images }) => {
+const ImageGallery = ({ images, onImageClick }) => {
   return (
-    <div className="gallery">
+    <ul className="gallery">
       {images.map(image => (
-        <ImageGalleryItem key={image.id} image={image} />
+        <ImageGalleryItem
+          key={image.id}
+          image={image}
+          onClick={() => onImageClick(image)}
+        />
       ))}
-    </div>
+    </ul>
   );
 };
 

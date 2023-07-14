@@ -70,6 +70,7 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 15px;
 }
 
 .gallery-item__image {

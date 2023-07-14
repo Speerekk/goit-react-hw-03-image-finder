@@ -1,72 +1,95 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 import Modal from './Modal/Modal';
 import Loader from './Loader/Loader';
-import '../index.css';
 
 const API_KEY = '36809568-a0d5a67efa5c37ce2fdc5564f';
 
-const App = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [images, setImages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  useEffect(() => {
-    if (searchQuery === '') return;
-
-    const fetchImages = async () => {
-      setIsLoading(true);
-
-      try {
-        const response = await axios.get(
-          `https://pixabay.com/api/?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-        );
-        const data = response.data.hits;
-        setImages(prevImages => [...prevImages, ...data]);
-      } catch (error) {
-        console.log('Error fetching images:', error);
-      }
-
-      setIsLoading(false);
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchQuery: '',
+      images: [],
+      page: 1,
+      isLoading: false,
+      selectedImage: null,
     };
+  }
 
-    fetchImages();
-  }, [searchQuery, page]);
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchQuery !== this.state.searchQuery) {
+      this.fetchImages();
+    }
+  }
 
-  const handleSearchSubmit = query => {
-    setSearchQuery(query);
-    setImages([]);
-    setPage(1);
+  handleSearchSubmit = query => {
+    this.setState({ searchQuery: query, page: 1, images: [] });
   };
 
-  const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
+  handleLoadMore = () => {
+    this.setState(
+      prevState => ({ page: prevState.page + 1 }),
+      () => {
+        this.fetchImages();
+      }
+    );
   };
 
-  const handleImageClick = image => {
-    setSelectedImage(image);
+  handleOpenModal = image => {
+    this.setState({ selectedImage: image });
   };
 
-  const handleCloseModal = () => {
-    setSelectedImage(null);
+  handleCloseModal = () => {
+    this.setState({ selectedImage: null });
   };
 
-  return (
-    <div className="app">
-      <Searchbar onSubmit={handleSearchSubmit} />
-      <ImageGallery images={images} onImageClick={handleImageClick} />
-      {isLoading && <Loader />}
-      {images.length > 0 && <Button onClick={handleLoadMore} />}
-      {selectedImage && (
-        <Modal image={selectedImage} onClose={handleCloseModal} />
-      )}
-    </div>
-  );
-};
+  fetchImages = () => {
+    const { searchQuery, page } = this.state;
+
+    if (searchQuery.trim() === '') {
+      return;
+    }
+
+    this.setState({ isLoading: true });
+
+    axios
+      .get(
+        `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&page=${page}&per_page=12`
+      )
+      .then(response => {
+        this.setState(prevState => ({
+          images: [...prevState.images, ...response.data.hits],
+        }));
+      })
+      .catch(error => {
+        console.error('Error fetching images:', error);
+      })
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+  };
+
+  render() {
+    const { images, isLoading, selectedImage } = this.state;
+
+    return (
+      <div className="App">
+        <Searchbar onSubmit={this.handleSearchSubmit} />
+        {isLoading && <Loader />}
+        <ImageGallery images={images} onImageClick={this.handleOpenModal} />
+        {images.length > 0 && !isLoading && (
+          <Button onClick={this.handleLoadMore}>Load more</Button>
+        )}
+        {selectedImage && (
+          <Modal image={selectedImage} onClose={this.handleCloseModal} />
+        )}
+      </div>
+    );
+  }
+}
 
 export default App;
