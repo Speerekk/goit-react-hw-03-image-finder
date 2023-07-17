@@ -17,17 +17,20 @@ class App extends Component {
       page: 1,
       isLoading: false,
       selectedImage: null,
+      hasMore: true,
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
-      this.fetchImages();
+      this.setState({ page: 1, images: [], hasMore: true }, () => {
+        this.fetchImages();
+      });
     }
   }
 
   handleSearchSubmit = query => {
-    this.setState({ searchQuery: query, page: 1, images: [] });
+    this.setState({ searchQuery: query });
   };
 
   handleLoadMore = () => {
@@ -39,8 +42,8 @@ class App extends Component {
     );
   };
 
-  handleOpenModal = image => {
-    this.setState({ selectedImage: image });
+  handleOpenModal = imageURL => {
+    this.setState({ selectedImage: imageURL });
   };
 
   handleCloseModal = () => {
@@ -61,9 +64,13 @@ class App extends Component {
         `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&page=${page}&per_page=12`
       )
       .then(response => {
-        this.setState(prevState => ({
-          images: [...prevState.images, ...response.data.hits],
-        }));
+        if (response.data.hits.length === 0) {
+          this.setState({ hasMore: false });
+        } else {
+          this.setState(prevState => ({
+            images: [...prevState.images, ...response.data.hits],
+          }));
+        }
       })
       .catch(error => {
         console.error('Error fetching images:', error);
@@ -74,18 +81,18 @@ class App extends Component {
   };
 
   render() {
-    const { images, isLoading, selectedImage } = this.state;
+    const { images, isLoading, selectedImage, hasMore } = this.state;
 
     return (
       <div className="App">
         <Searchbar onSubmit={this.handleSearchSubmit} />
         {isLoading && <Loader />}
         <ImageGallery images={images} onImageClick={this.handleOpenModal} />
-        {images.length > 0 && !isLoading && (
+        {images.length > 0 && !isLoading && hasMore && (
           <Button onClick={this.handleLoadMore}>Load more</Button>
         )}
         {selectedImage && (
-          <Modal image={selectedImage} onClose={this.handleCloseModal} />
+          <Modal imageURL={selectedImage} onClose={this.handleCloseModal} />
         )}
       </div>
     );
