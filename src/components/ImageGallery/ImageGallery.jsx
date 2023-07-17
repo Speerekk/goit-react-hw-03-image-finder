@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 
 class ImageGallery extends Component {
@@ -20,15 +20,15 @@ class ImageGallery extends Component {
   }
 }
 
-ImageGallery.propTypes = {
-  images: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      webformatURL: PropTypes.string.isRequired,
-      largeImageURL: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  onImageClick: PropTypes.func.isRequired,
-};
+// ImageGallery.propTypes = {
+//   images: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       id: PropTypes.number.isRequired,
+//       webformatURL: PropTypes.string.isRequired,
+//       largeImageURL: PropTypes.string.isRequired,
+//     })
+//   ).isRequired,
+//   onImageClick: PropTypes.func.isRequired,
+// };
 
 export default ImageGallery;

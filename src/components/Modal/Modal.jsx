@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 class Modal extends Component {
   handleOverlayClick = event => {
@@ -38,11 +38,11 @@ class Modal extends Component {
   }
 }
 
-Modal.propTypes = {
-  image: PropTypes.shape({
-    largeImageURL: PropTypes.string.isRequired,
-  }).isRequired,
-  onClose: PropTypes.func.isRequired,
-};
+// Modal.propTypes = {
+//   image: PropTypes.shape({
+//     largeImageURL: PropTypes.string.isRequired,
+//   }).isRequired,
+//   onClose: PropTypes.func.isRequired,
+// };
 
 export default Modal;
