@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
@@ -98,5 +99,25 @@ class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  searchQuery: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
+  selectedImage: PropTypes.object,
+  hasMore: PropTypes.bool.isRequired,
+  handleSearchSubmit: PropTypes.func.isRequired,
+  handleLoadMore: PropTypes.func.isRequired,
+  handleOpenModal: PropTypes.func.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
+  fetchImages: PropTypes.func.isRequired,
+};
 
 export default App;
